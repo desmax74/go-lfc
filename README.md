@@ -1,5 +1,8 @@
 # Lock free collections
 
+This library use unsafe and atomic. So it is not crossplatform.
+
+
 ## Queue:
     Use Michael Scott queue algorithm.
 ### Bench AMD 5545M:
