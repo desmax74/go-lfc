@@ -10,6 +10,6 @@
 # Tasks
 
 - [x] Queue
-- [ ] Stack
+- [x] Stack
 - [ ] Map
 - [ ] Linked List
