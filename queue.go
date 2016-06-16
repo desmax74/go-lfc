@@ -33,6 +33,7 @@ func (q *Queue) Enqueue(value interface{}) {
 		if tail == q.tail {
 			if next == nil {
 				if atomic.CompareAndSwapPointer(&(*Element)(q.tail).next, next, unsafe.Pointer(nElem)) {
+					atomic.CompareAndSwapPointer(&q.tail, tail, unsafe.Pointer(nElem))
 					atomic.AddInt64(&q.len, 1)
 					break
 				}
@@ -66,5 +67,5 @@ func (q *Queue) Dequeue() (value interface{}, ok bool) {
 }
 
 func (q *Queue) Len() int64 {
-	return q.len
+	return atomic.LoadInt64(&q.len)
 }

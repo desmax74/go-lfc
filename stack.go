@@ -40,5 +40,5 @@ func (s *Stack) Pop() (value interface{}, ok bool) {
 }
 
 func (s *Stack) Len() int64 {
-	return s.len
+	return atomic.LoadInt64(&s.len)
 }
