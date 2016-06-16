@@ -69,3 +69,28 @@ func (q *Queue) Dequeue() (value interface{}, ok bool) {
 func (q *Queue) Len() int64 {
 	return atomic.LoadInt64(&q.len)
 }
+
+//Get n element from queue without delete it. If n > q.Len return all elems.
+//Need tests for this function.
+func (q *Queue) Get(n uint) (values []interface{}) {
+	values = make([]interface{}, 0, n)
+	head := atomic.LoadPointer(&q.head)
+	for ; n > 0; n-- {
+		next := (*Element)(head).next
+		if next == nil {
+			return
+		}
+		values = append(values, (*Element)(next).value)
+		head = next
+	}
+	return
+}
+
+func (q *Queue) GetAll() (values []interface{}) {
+	values = make([]interface{}, 0, q.Len())
+	next := (*Element)(atomic.LoadPointer(&q.head)).next
+	for ; next != nil; next = (*Element)(next).next {
+		values = append(values, (*Element)(next).value)
+	}
+	return
+}
