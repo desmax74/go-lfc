@@ -42,3 +42,28 @@ func (s *Stack) Pop() (value interface{}, ok bool) {
 func (s *Stack) Len() int64 {
 	return atomic.LoadInt64(&s.len)
 }
+
+//Get n element from queue without delete it. If n > s.Len return all elems.
+//Need tests for this function.
+func (s *Stack) Get(n uint) (values []interface{}) {
+	values = make([]interface{}, 0, n)
+	head := atomic.LoadPointer(&s.head)
+	for ; n > 0; n-- {
+		next := (*Element)(head).next
+		if next == nil {
+			return
+		}
+		values = append(values, (*Element)(next).value)
+		head = next
+	}
+	return
+}
+
+func (s *Stack) GetAll() (values []interface{}) {
+	values = make([]interface{}, 0, s.Len())
+	next := (*Element)(atomic.LoadPointer(&s.head)).next
+	for ; next != nil; next = (*Element)(next).next {
+		values = append(values, (*Element)(next).value)
+	}
+	return
+}
